@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#050508" />
+
+  <title>$FATCATS — LAUNCH</title>
+  <meta name="description" content="Fat Cats Official. The Most Luxurious Meme Coin on Solana. Launch on Raydium LaunchLab.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-dark: #050508;
+      --gold-1: #fff2c6;
+      --gold-2: #ffd36a;
+      --gold-3: #c88a1a;
+      --gold-4: #7a4c07;
+      --glass-surface: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 214, 120, 0.15);
+      --glass-blur: 20px;
+      --text-main: #e9e7e0;
+      --text-muted: #bcb7aa;
+      --shadow-soft: 0 20px 60px rgba(0,0,0,0.6);
+
+      --font-header: 'Cinzel', serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: var(--font-body);
+      color: var(--text-main);
+      background: #000;
+      overflow: hidden;
+    }
+
+    /* =========================
+       PREMIUM VIDEO BACKGROUND
+       ========================= */
+    #bgVideo {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -3;
+      filter: brightness(0.6) contrast(1.1) saturate(1.1);
+      transition: opacity 2s ease;
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      background: radial-gradient(circle at center, transparent 0%, #000 120%);
+    }
+
+    /* =========================
+       SAFE LANDING (THE VAULT)
+       ========================= */
+    #landing {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 50% 30%, #1a1b26 0%, #050508 100%);
+      z-index: 100;
+      transition: opacity 1s cubic-bezier(0.6, 0, 0.4, 1), transform 1s cubic-bezier(0.6, 0, 0.4, 1);
+    }
+
+    #landing::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 215, 120, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 215, 120, 0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .safe-wrap {
+      position: relative;
+      width: min(500px, 90vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      z-index: 2;
+    }
+
+    .safe {
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 30px;
+      background: linear-gradient(145deg, var(--gold-4), var(--gold-3));
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.2),
+        0 0 40px rgba(255, 214, 120, 0.3);
+      border: 4px solid var(--gold-2);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .dial-container {
+      width: 50%;
+      height: 50%;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--gold-4), var(--gold-3), var(--gold-2), var(--gold-1), var(--gold-2), var(--gold-3), var(--gold-4));
+      border: 6px solid var(--gold-1);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255, 214, 120, 0.4);
+      position: relative;
+      display: grid;
+      place-items: center;
+      transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .knob {
+      width: 60%;
+      height: 60%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--gold-1), var(--gold-4));
+      box-shadow: 0 5px 20px rgba(0,0,0,0.9), inset 0 2px 10px rgba(255,255,255,0.4);
+      position: relative;
+    }
+
+    .knob::after {
+      content: "";
+      position: absolute;
+      top: 10px; left: 50%;
+      transform: translateX(-50%);
+      width: 6px; height: 20px;
+      background: var(--gold-1);
+      border-radius: 3px;
+      box-shadow: 0 0 20px var(--gold-2);
+    }
+
+    .handle-bar {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      width: 120%;
+      height: 30px;
+      background: var(--gold-2);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 214, 120, 0.5);
+      z-index: -1;
+    }
+
+    .btn-unlock {
+      background: linear-gradient(90deg, var(--gold-3), var(--gold-1), var(--gold-3));
+      background-size: 200% auto;
+      color: #000;
+      font-family: var(--font-header);
+      font-weight: 900;
+      font-size: 1.1rem;
+      padding: 18px 40px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 40px rgba(255, 215, 120, 0.5);
+      transition: all 0.3s ease;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: shine 3s infinite linear;
+    }
+
+    .btn-unlock:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 60px rgba(255, 215, 120, 0.8);
+    }
+
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+
+    .unlocking .dial-container { transform: rotate(720deg); }
+    .landing-hidden {
+      opacity: 0;
+      transform: scale(1.1);
+      pointer-events: none;
+    }
+
+    /* =========================
+       MAIN UI
+       ========================= */
+    #app {
+      display: none;
+      min-height: 100vh;
+      opacity: 0;
+      transition: opacity 1s ease;
+      padding-bottom: 80px;
+    }
+
+    body.unlocked #app { display: block; opacity: 1; }
+    body.unlocked .vignette { display: block; }
+
+    /* Top Marquee */
+    .marquee-wrapper {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 8px 0;
+    }
+
+    .marquee {
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+      gap: 2rem;
+    }
+
+    .marquee-content {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-around;
+      min-width: 100%;
+      gap: 2rem;
+      animation: scroll 20s linear infinite;
+    }
+
+    .marquee span, .marquee a {
+      color: var(--gold-1);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .marquee a:hover { text-decoration: underline; color: #fff; cursor: pointer; }
+
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(calc(-100% - 2rem)); }
+    }
+
+    /* Main Container – TOP RIGHT */
+    .container {
+      max-width: 1400px;
+      margin: 140px 40px 0 auto;
+      padding: 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      min-height: auto;
+    }
+
+    .hero-card {
+      background: var(--glass-surface);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 50px;
+      max-width: 680px;
+      box-shadow: var(--shadow-soft), 0 0 40px rgba(255, 214, 120, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transition: 0.5s;
+    }
+    .hero-card:hover::before { left: 100%; }
+
+    h1 {
+      font-family: var(--font-header);
+      font-size: clamp(3rem, 8vw, 5rem);
+      margin: 0;
+      line-height: 0.9;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, var(--gold-1) 0%, var(--gold-2) 40%, var(--gold-3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 0px rgba(0,0,0,0.5));
+    }
+
+    p.tagline {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin: 20px 0 22px;
+      letter-spacing: 0.05em;
+    }
+
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin: 10px 0 18px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .pill b{ color: var(--gold-2); }
+
+    .features {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 18px 0 26px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #fff;
+      font-weight: 600;
+    }
+    .feature span { color: var(--gold-2); }
+
+    .launch-box{
+      margin-top: 10px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255, 214, 120, 0.18);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .launch-top{
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .launch-title{
+      font-family: var(--font-header);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 1.05rem;
+      margin:0;
+    }
+    .launch-status{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.8rem;
+    }
+    .dot{
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gold-2);
+      box-shadow: 0 0 18px rgba(255, 214, 120, 0.6);
+    }
+
+    .countdown{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(60px, 1fr));
+      gap: 10px;
+    }
+    .cd{
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      padding: 12px;
+      text-align:center;
+    }
+    .cd .n{
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--gold-1);
+      font-variant-numeric: tabular-nums;
+    }
+    .cd .l{
+      margin-top: 4px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn-primary {
+      background: var(--gold-2);
+      color: #000;
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 900;
+      text-transform: uppercase;
+      transition: transform 0.2s;
+      border: 1px solid var(--gold-1);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,214,120,0.3); }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 900;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+      border: 1px solid rgba(255,255,255,0.2);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+    .mint-address {
+      margin-top: 16px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: var(--gold-2);
+      background: rgba(0,0,0,0.4);
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: color 0.3s;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mint-address:hover { color: #fff; }
+    .mint-address::after { content: " (Click to Copy)"; opacity: 0.5; font-size: 0.8em; }
+
+    .hint{
+      margin-top: 10px;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+    .hint b{ color: var(--gold-1); }
+
+    .socials-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      display: flex;
+      gap: 15px;
+      z-index: 20;
+    }
+    .social-icon {
+      width: 50px; height: 50px;
+      background: var(--glass-surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--gold-1);
+      transition: 0.3s;
+      text-decoration: none;
+    }
+    .social-icon:hover { transform: translateY(-5px); border-color: var(--gold-1); }
+
+    #toast {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold-2);
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 200;
+    }
+    #toast.show { opacity: 1; }
+
+    @media(max-width: 768px) {
+      h1 { font-size: 3.5rem; }
+      .hero-card { padding: 28px; }
+      .container { margin: 120px 18px 0 auto; }
+      .btn-group { width: 100%; }
+      .btn-primary, .btn-ghost { flex: 1; text-align: center; }
+      .countdown{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+      .socials-float { bottom: 20px; right: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <video id="bgVideo" playsinline loop muted autoplay>
+    <source src="123.mp4" type="video/mp4" />
+  </video>
+  <div class="vignette"></div>
+
+  <div id="toast">Copied!</div>
+
+  <div id="landing">
+    <div class="safe-wrap">
+      <div class="safe">
+        <div class="handle-bar"></div>
+        <div class="dial-container" id="dial">
+          <div class="knob"></div>
+        </div>
+      </div>
+      <button class="btn-unlock" id="unlockBtn">OPEN VAULT</button>
+    </div>
+  </div>
+
+  <main id="app">
+
+    <div class="marquee-wrapper">
+      <div class="marquee">
+        <div class="marquee-content">
+           <span>$FATCATS</span> •
+           <a onclick="copyMint()">CA: <span id="marquee-mint">TBA</span></a> •
+           <a id="marquee-launch" target="_blank" rel="noopener">LAUNCHLAB</a> •
+           <span>NO TAX</span> •
+           <span>LP LOCKED</span> •
+           <span>FAIR LAUNCH</span> •
+           <span>FAT WALLETS ONLY</span> •
+           <span>MEOW TO THE MOON</span> •
+        </div>
+        <div class="marquee-content" aria-hidden="true">
+           <span>$FATCATS</span> •
+           <a onclick="copyMint()">CA: <span id="marquee-mint-2">TBA</span></a> •
+           <a id="marquee-launch-2" target="_blank" rel="noopener">LAUNCHLAB</a> •
+           <span>NO TAX</span> •
+           <span>LP LOCKED</span> •
+           <span>FAIR LAUNCH</span> •
+           <span>FAT WALLETS ONLY</span> •
+           <span>MEOW TO THE MOON</span> •
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="hero-card">
+        <h1>Fat Cats<br>Official</h1>
+        <p class="tagline">Luxury meme coin for the fattest wallets. Because skinny cats are for the poor.</p>
+
+        <div class="pill-row">
+          <div class="pill">Network: <b>Solana</b></div>
+          <div class="pill">Launch: <b>Raydium LaunchLab</b></div>
+          <div class="pill" id="pill-time">Start: <b>TBA</b></div>
+        </div>
+
+        <div class="features">
+          <div class="feature"><span>✓</span> Ownership Renounced</div>
+          <div class="feature"><span>✓</span> LP Locked</div>
+          <div class="feature"><span>✓</span> 0% Tax – All Gains Yours</div>
+        </div>
+
+        <!-- LaunchLab block (new) -->
+        <div class="launch-box">
+          <div class="launch-top">
+            <p class="launch-title">Launch Countdown</p>
+            <div class="launch-status" id="launchStatus"><span class="dot"></span><span id="statusText">TBA</span></div>
+          </div>
+
+          <div class="countdown" aria-label="Countdown">
+            <div class="cd"><div class="n" id="cdDays">--</div><div class="l">Days</div></div>
+            <div class="cd"><div class="n" id="cdHours">--</div><div class="l">Hours</div></div>
+            <div class="cd"><div class="n" id="cdMins">--</div><div class="l">Mins</div></div>
+            <div class="cd"><div class="n" id="cdSecs">--</div><div class="l">Secs</div></div>
+          </div>
+
+          <div class="btn-group">
+            <a href="#" id="launchLabLink" target="_blank" rel="noopener" class="btn-primary">Enter LaunchLab</a>
+            <a href="#" id="chartLink" target="_blank" rel="noopener" class="btn-ghost">Live Chart</a>
+          </div>
+
+          <div class="hint" id="hintLine">
+            If CA is not published yet, keep it <b>TBA</b> — LaunchLab link is the main CTA during launch.
+          </div>
+        </div>
+
+        <div class="mint-address" onclick="copyMint()" id="displayMint">TBA</div>
+      </div>
+    </div>
+
+    <div class="socials-float">
+      <a href="#" id="x1Btn" target="_blank" rel="noopener" class="social-icon" title="Twitter/X">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="#" id="igBtn" target="_blank" rel="noopener" class="social-icon" title="Instagram">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.069-1.645-.069-4.849 0-3.204.012-3.584.069-4.849.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.667.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.667-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.948-.2-4.358-2.618-6.78-6.98-6.98C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+      </a>
+      <a href="#" id="tgBtn" target="_blank" rel="noopener" class="social-icon" title="Telegram">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    /**
+     * LAUNCHLAB-READY CONFIG
+     * - During launch: set launchLabUrl + launchStartISO (or launchStartEpochMs)
+     * - After launch: set mint (CA) and optionally raydiumSwapUrl if you want a "Buy on Raydium" button somewhere else.
+     */
+    const CONFIG = {
+      mint: "TBA", // e.g. "9x...yourMint...Q" (keep TBA until official)
+      launchLabUrl: "https://raydium.io/launchpad/", // <-- paste your exact LaunchLab page URL here
+      launchStartISO: "2026-02-04T19:00:00+01:00", // Launch: Wednesday 19:00 CET
+      // Alternatively, comment launchStartISO and set launchStartEpochMs: 0,
+
+      // Optional links
+      chartUrl: "https://dexscreener.com/solana/",     // + mint after CA is known
+      raydiumSwapBase: "https://raydium.io/swap/?inputCurrency=sol&outputCurrency=", // + mint after CA is known
+
+      // Socials
+      x1: "https://x.com/YourProfile1",
+      ig: "https://www.instagram.com/YourProfile",
+      tg: "https://t.me/YourChannel"
+    };
+
+    const unlockBtn = document.getElementById('unlockBtn');
+    const landing = document.getElementById('landing');
+    const video = document.getElementById('bgVideo');
+    const body = document.body;
+
+    const el = (id) => document.getElementById(id);
+
+    function setText(id, val){ el(id).innerText = val; }
+
+    function formatStartLabel(date){
+      try{
+        // Display in user's local timezone automatically
+        return date.toLocaleString(undefined, {
+          weekday: 'short', year: 'numeric', month: 'short', day: '2-digit',
+          hour: '2-digit', minute: '2-digit'
+        });
+      }catch(e){
+        return String(date);
+      }
+    }
+
+    function getLaunchStart(){
+      if (typeof CONFIG.launchStartEpochMs === "number" && CONFIG.launchStartEpochMs > 0){
+        return new Date(CONFIG.launchStartEpochMs);
+      }
+      if (CONFIG.launchStartISO){
+        const d = new Date(CONFIG.launchStartISO);
+        if (!isNaN(d.getTime())) return d;
+      }
+      return null;
+    }
+
+    function getLaunchStatus(now, start){
+      if (!start) return "TBA";
+      const diff = start.getTime() - now.getTime();
+      if (diff > 0) return "Upcoming";
+      // If launch started but CA unknown, it's "Live"
+      if (CONFIG.mint === "TBA" || !CONFIG.mint) return "Live";
+      return "Live";
+    }
+
+    function updateCountdown(){
+      const start = getLaunchStart();
+      const now = new Date();
+
+      // Pill label
+      if (start){
+        el('pill-time').innerHTML = 'Start: <b>' + formatStartLabel(start) + '</b>';
+      } else {
+        el('pill-time').innerHTML = 'Start: <b>TBA</b>';
+      }
+
+      // Status
+      const status = getLaunchStatus(now, start);
+      el('statusText').innerText = status;
+
+      // Countdown numbers
+      if (!start){
+        setText('cdDays', '--'); setText('cdHours','--'); setText('cdMins','--'); setText('cdSecs','--');
+        return;
+      }
+
+      let diff = start.getTime() - now.getTime();
+      if (diff < 0) diff = 0;
+
+      const sec = Math.floor(diff / 1000);
+      const days = Math.floor(sec / 86400);
+      const hours = Math.floor((sec % 86400) / 3600);
+      const mins = Math.floor((sec % 3600) / 60);
+      const secs = sec % 60;
+
+      setText('cdDays', String(days).padStart(2,'0'));
+      setText('cdHours', String(hours).padStart(2,'0'));
+      setText('cdMins', String(mins).padStart(2,'0'));
+      setText('cdSecs', String(secs).padStart(2,'0'));
+
+      // Hint + chart button behavior
+      const hasMint = CONFIG.mint && CONFIG.mint !== "TBA";
+      const chart = el('chartLink');
+      if (hasMint){
+        chart.href = CONFIG.chartUrl + CONFIG.mint;
+        chart.style.pointerEvents = 'auto';
+        chart.style.opacity = '1';
+        el('hintLine').innerHTML = 'CA is live — you can verify it in the marquee or copy below. Always confirm from official socials.';
+      } else {
+        chart.href = '#';
+        chart.style.pointerEvents = 'none';
+        chart.style.opacity = '0.55';
+        el('hintLine').innerHTML = 'If CA is not published yet, keep it <b>TBA</b> — LaunchLab link is the main CTA during launch.';
+      }
+    }
+
+    function init(){
+      // Mint placements
+      setText('marquee-mint', CONFIG.mint || 'TBA');
+      setText('marquee-mint-2', CONFIG.mint || 'TBA');
+      setText('displayMint', CONFIG.mint || 'TBA');
+
+      // LaunchLab links (main CTA)
+      el('launchLabLink').href = CONFIG.launchLabUrl;
+      el('marquee-launch').href = CONFIG.launchLabUrl;
+      el('marquee-launch-2').href = CONFIG.launchLabUrl;
+
+      // Socials
+      el('x1Btn').href = CONFIG.x1;
+      el('igBtn').href = CONFIG.ig;
+      el('tgBtn').href = CONFIG.tg;
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+
+    unlockBtn.addEventListener('click', () => {
+      video.muted = false;
+      document.body.classList.add('unlocking');
+
+      setTimeout(() => {
+        landing.classList.add('landing-hidden');
+        body.classList.add('unlocked');
+
+        setTimeout(() => {
+          landing.style.display = 'none';
+        }, 1000);
+      }, 800);
+    });
+
+    window.copyMint = function(){
+      const mint = (CONFIG.mint && CONFIG.mint !== 'TBA') ? CONFIG.mint : 'TBA';
+      navigator.clipboard.writeText(mint).then(() => {
+        const toast = document.getElementById('toast');
+        toast.innerText = (mint === 'TBA') ? 'CA not announced yet' : 'CA copied!';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      });
+    };
+
+    init();
+  </script>
+</body>
+</html>
